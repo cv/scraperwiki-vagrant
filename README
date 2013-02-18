@@ -1,0 +1,7 @@
+scraperwiki-vagrant
+-------------------
+
+scraperwiki-vagrant is an attempt at automating the bootstrapping and setup of a development server for people who want to hack on ScraperWiki (http://www.scraperwiki.com).
+
+It is not yet working as it should, but gets the basic packages installed. There's a lot more to do. If you'd like to help, check out the Issues tab.
+
