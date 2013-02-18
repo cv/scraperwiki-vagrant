@@ -29,6 +29,15 @@ class scraperwiki {
       require   => Exec['scraperwiki root dir'],
     ;
 
+    'buildout-dev':
+      command   => '. bin/activate && buildout -c buildout_dev.cfg',
+      cwd       => $root_dir,
+      timeout   => 0,
+      logoutput => true,
+      provider  => 'shell',
+      require   => Exec['buildout-dev'],
+    ;
+
     'buildout':
       command   => '. bin/activate && buildout',
       cwd       => $root_dir,
