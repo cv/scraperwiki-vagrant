@@ -1,36 +1,19 @@
 # Init for ScraperWiki setup
 class scraperwiki {
 
-  $required_packages = [
-    'make',
-    'curl',
-    'g++',
-    'mercurial',
-    'php5',
-    'ruby1.9.1',
-    'python-virtualenv',
-    'python-dev',
-    'python-m2crypto',
-    'mysql-server',
-    'libmysqlclient-dev',
-    'git-core',
-    'libjson-ruby',
-    'libxml2-dev',
-    'libxslt-dev',
-    'libssl-dev',
-    'swig',
-  ]
+  include scraperwiki::requirements
+
+  $repository = 'https://bitbucket.org/ScraperWiki/scraperwiki'
+  $root_dir = '/opt/scraperwiki'
 
   exec {
-    'apt-get update':
-      command => '/usr/bin/apt-get update',
+    'hg clone':
+      command => "/usr/bin/hg clone ${repository} ${root_dir}",
+      require => Exec['scraperwiki root dirs'],
     ;
-  }
 
-  package {
-    $required_packages:
-      ensure  => 'latest',
-      require => Exec['apt-get update'],
+    'scraperwiki root dirs':
+      command => "mkdir -p ${root_dir}",
     ;
   }
 
