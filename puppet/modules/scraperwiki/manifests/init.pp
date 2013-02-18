@@ -16,17 +16,26 @@ class scraperwiki {
     $python_dependencies:
       provider => 'pip',
       ensure   => 'latest',
+      root     => $root_dir,
     ;
   }
 
   exec {
+    'virtualenv':
+      command   => 'virtualenv --no-site-packages .',
+      cwd       => $root_dir,
+      logoutput => true,
+      provider  => 'shell',
+      require   => Exec['scraperwiki root dir'],
+    ;
+
     'buildout':
-      command   => 'buildout',
+      command   => '. bin/activate && buildout',
       cwd       => $root_dir,
       timeout   => 0,
       logoutput => true,
       provider  => 'shell',
-      require   => [Package['distribute'], Package['zc.buildout']],
+      require   => [Exec['virtualenv'], Package['distribute'], Package['zc.buildout']],
     ;
 
     'hg clone':
