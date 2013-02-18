@@ -53,7 +53,14 @@ Vagrant::Config.run do |config|
   # #   content => "Welcome to your Vagrant-built virtual machine!
   # #               Managed by Puppet.\n"
   # # }
-  config.vm.provision :puppet, module_path: 'puppet/modules', facter: { fqdn: 'precise.vagrant' } do |puppet|
+  options = {
+    module_path: 'puppet/modules',
+    options:     ['--verbose', '--debug'],
+    facter:      { fqdn: 'precise.vagrant' }
+  }
+
+  config.vm.provision :puppet, options do |puppet|
+
     puppet.manifests_path = 'puppet'
     puppet.manifest_file  = 'site.pp'
   end
