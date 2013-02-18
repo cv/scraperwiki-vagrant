@@ -7,6 +7,7 @@ class scraperwiki {
   $root_dir = '/opt/scraperwiki'
 
   $python_dependencies = [
+    'pip',
     'distribute',
     'zc.buildout',
   ]
