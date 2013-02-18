@@ -6,34 +6,35 @@ class scraperwiki {
   $repository = 'https://bitbucket.org/ScraperWiki/scraperwiki'
   $root_dir = '/opt/scraperwiki'
 
+  $python_dependencies = [
+    'distribute',
+    'zc.buildout',
+  ]
+
+  package {
+    $python_dependencies:
+      provider => 'pip',
+      ensure   => 'latest',
+    ;
+  }
+
   exec {
     'buildout':
-      command   => '/bin/bash -c "source bin/activate && /usr/bin/pip install zc.buildout && buildout"',
+      command   => 'buildout',
       cwd       => $root_dir,
       timeout   => 0,
       logoutput => true,
-      require   => Exec['update distribute'],
-    ;
-
-    'update distribute':
-      command => '/bin/bash -c "source bin/activate && easy_install -U distribute"',
-      cwd     => $root_dir,
-      require => Exec['virtualenv'],
-    ;
-
-    'virtualenv':
-      command => '/usr/bin/virtualenv --no-site-packages .',
-      cwd     => $root_dir,
-      require => Exec['hg clone'],
+      provider  => 'shell',
+      require   => [Package['distribute'], Package['zc.buildout']],
     ;
 
     'hg clone':
       command => "/usr/bin/hg clone ${repository} ${root_dir}",
       creates => "${root_dir}/.hg",
-      require => Exec['scraperwiki root dirs'],
+      require => Exec['scraperwiki root dir'],
     ;
 
-    'scraperwiki root dirs':
+    'scraperwiki root dir':
       command => "/bin/mkdir -p ${root_dir}",
     ;
   }
