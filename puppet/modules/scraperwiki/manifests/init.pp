@@ -13,7 +13,7 @@ class scraperwiki {
     ;
 
     'scraperwiki root dirs':
-      command => "mkdir -p ${root_dir}",
+      command => "/bin/mkdir -p ${root_dir}",
     ;
   }
 
