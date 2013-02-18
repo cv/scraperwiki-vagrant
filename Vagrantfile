@@ -7,7 +7,7 @@ Vagrant::Config.run do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "precise"
+  config.vm.box = 'precise'
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
@@ -53,10 +53,9 @@ Vagrant::Config.run do |config|
   # #   content => "Welcome to your Vagrant-built virtual machine!
   # #               Managed by Puppet.\n"
   # # }
-  #
-  config.vm.provision :puppet do |puppet|
-    puppet.manifests_path = 'manifests'
-    puppet.manifest_file  = 'scraperwiki.pp'
+  config.vm.provision :puppet, module_path: 'puppet/modules', facter: { fqdn: 'precise.vagrant' } do |puppet|
+    puppet.manifests_path = 'puppet'
+    puppet.manifest_file  = 'site.pp'
   end
 
   # Enable provisioning with chef solo, specifying a cookbooks path, roles
