@@ -14,37 +14,27 @@ class scraperwiki {
 
   package {
     $python_dependencies:
-      provider => 'pip',
       ensure   => 'latest',
-      root     => $root_dir,
+      provider => 'pip',
+      require  => Package['python-pip'],
     ;
   }
 
   exec {
-    'virtualenv':
-      command   => 'virtualenv --no-site-packages .',
-      cwd       => $root_dir,
-      logoutput => true,
-      provider  => 'shell',
-      require   => Exec['scraperwiki root dir'],
-    ;
-
     'buildout-dev':
-      command   => '. bin/activate && buildout -c buildout_dev.cfg',
+      command   => '/usr/local/bin/buildout -v -c buildout_dev.cfg',
       cwd       => $root_dir,
       timeout   => 0,
       logoutput => true,
-      provider  => 'shell',
-      require   => Exec['buildout-dev'],
+      require   => Exec['buildout'],
     ;
 
     'buildout':
-      command   => '. bin/activate && buildout',
+      command   => '/usr/local/bin/buildout -v',
       cwd       => $root_dir,
       timeout   => 0,
       logoutput => true,
-      provider  => 'shell',
-      require   => [Exec['virtualenv'], Package['distribute'], Package['zc.buildout']],
+      require   => [Exec['scraperwiki root dir'], Package['distribute'], Package['zc.buildout']],
     ;
 
     'hg clone':
@@ -57,6 +47,5 @@ class scraperwiki {
       command => "/bin/mkdir -p ${root_dir}",
     ;
   }
-
 
 }

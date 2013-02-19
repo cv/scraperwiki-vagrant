@@ -10,6 +10,7 @@ class scraperwiki::requirements {
     'ruby1.9.1',
     'python-virtualenv',
     'python-dev',
+    'python-pip',
     'python-m2crypto',
     'mysql-server',
     'libmysqlclient-dev',
