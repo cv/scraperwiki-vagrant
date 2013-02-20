@@ -7,7 +7,6 @@ class scraperwiki {
   $root_dir = '/opt/scraperwiki'
 
   $python_dependencies = [
-    'pip',
     'distribute',
     'zc.buildout',
   ]
@@ -16,11 +15,19 @@ class scraperwiki {
     $python_dependencies:
       ensure   => 'latest',
       provider => 'pip',
-      require  => Package['python-pip'],
+      require  => Exec['update pip'],
     ;
   }
 
   exec {
+
+    'update pip':
+      command   => '/usr/bin/pip install --upgrade pip',
+      timeout => 0,
+      logoutput => true,
+      require => Package["python-pip"]
+      ;
+
     'buildout-dev':
       command   => '/usr/local/bin/buildout -v -c buildout_dev.cfg',
       cwd       => $root_dir,
