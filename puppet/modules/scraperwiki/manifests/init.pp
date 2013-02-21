@@ -23,9 +23,10 @@ class scraperwiki {
 
     'update pip':
       command   => '/usr/bin/pip install --upgrade pip',
-      timeout => 0,
+      timeout   => 0,
       logoutput => true,
-      require => Package["python-pip"]
+      onlyif    => "/bin/bash -c 'test -e /usr/bin/pip'",
+      require   => Package["python-pip"]
       ;
 
     'buildout-dev':
@@ -45,7 +46,7 @@ class scraperwiki {
     ;
 
     'hg clone':
-      command => "/usr/bin/hg clone ${repository} ${root_dir}",
+      command => "/usr/bin/hg clone -vr stable ${repository} ${root_dir}",
       creates => "${root_dir}/.hg",
       require => Exec['scraperwiki root dir'],
     ;

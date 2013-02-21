@@ -1,6 +1,17 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+def local_cache(box_name)
+  cache_dir = File.join(File.expand_path(Vagrant::Environment::DEFAULT_HOME),
+                        'cache',
+                        'apt',
+                        box_name)
+  partial_dir = File.join(cache_dir, 'partial')
+  FileUtils.mkdir_p(partial_dir) unless File.exists? partial_dir
+  cache_dir
+end
+
+
 Vagrant::Config.run do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
@@ -35,6 +46,11 @@ Vagrant::Config.run do |config|
   # an identifier, the second is the path on the guest to mount the
   # folder, and the third is the path on the host to the actual folder.
   # config.vm.share_folder "v-data", "/vagrant_data", "../data"
+
+  cache_dir = local_cache(config.vm.box)
+  config.vm.share_folder "v-cache",
+                         "/var/cache/apt/archives/",
+                         cache_dir
 
   # Enable provisioning with Puppet stand alone.  Puppet manifests
   # are contained in a directory path relative to this Vagrantfile.
